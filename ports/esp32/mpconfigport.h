@@ -173,8 +173,9 @@
 extern const struct _mp_obj_module_t esp_module;
 extern const struct _mp_obj_module_t esp32_module;
 extern const struct _mp_obj_module_t utime_module;
-extern const struct _mp_obj_module_t uos_module;
 extern const struct _mp_obj_module_t mp_module_usocket;
+extern const struct _mp_obj_module_t uos_module;
+extern const struct _mp_obj_module_t mp_module_gsm;
 extern const struct _mp_obj_module_t mp_module_machine;
 extern const struct _mp_obj_module_t mp_module_network;
 extern const struct _mp_obj_module_t mp_module_onewire;
@@ -189,6 +190,7 @@ extern const struct _mp_obj_module_t mp_module_onewire;
     { MP_OBJ_NEW_QSTR(MP_QSTR_network), (mp_obj_t)&mp_module_network }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR__onewire), (mp_obj_t)&mp_module_onewire }, \
     { MP_OBJ_NEW_QSTR(MP_QSTR_uhashlib), (mp_obj_t)&mp_module_uhashlib }, \
+    { MP_OBJ_NEW_QSTR(MP_QSTR_gsm), (mp_obj_t)&mp_module_gsm }, \
 
 #define MICROPY_PORT_BUILTIN_MODULE_WEAK_LINKS \
     { MP_OBJ_NEW_QSTR(MP_QSTR_binascii), (mp_obj_t)&mp_module_ubinascii }, \
