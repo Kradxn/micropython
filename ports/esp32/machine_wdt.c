@@ -50,14 +50,6 @@ STATIC mp_obj_t machine_wdt_make_new(const mp_obj_type_t *type_in, size_t n_args
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
 
-<<<<<<< HEAD
-    mp_int_t timeout = 10;
-    if (n_args > 0) {
-        timeout = mp_obj_get_int(args[0]);
-    }
-    esp_task_wdt_init(timeout, true);
-    esp_task_wdt_add(NULL);
-=======
     if (args[ARG_id].u_int != 0) {
         mp_raise_ValueError(NULL);
     }
@@ -76,7 +68,6 @@ STATIC mp_obj_t machine_wdt_make_new(const mp_obj_type_t *type_in, size_t n_args
 
     esp_task_wdt_add(NULL);
 
->>>>>>> origin/master
     return &wdt_default;
 }
 

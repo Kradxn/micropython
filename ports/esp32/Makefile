@@ -193,12 +193,9 @@ SRC_C = \
 	machine_wdt.c \
 	mpthreadport.c \
 	machine_rtc.c \
-<<<<<<< HEAD
 	libGSM.c \
 	modgsm.c \
-=======
 	machine_sdcard.c \
->>>>>>> origin/master
 	$(SRC_MOD)
 
 EXTMOD_SRC_C = $(addprefix extmod/,\
