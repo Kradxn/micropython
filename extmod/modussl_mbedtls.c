@@ -60,8 +60,8 @@ struct ssl_args {
     mp_arg_val_t key;
     mp_arg_val_t cert;
     mp_arg_val_t server_side;
-    mp_arg_val_t server_hostname;
     mp_arg_val_t ca_certs;
+    mp_arg_val_t server_hostname;
     mp_arg_val_t do_handshake;
 };
 
@@ -206,16 +206,12 @@ STATIC mp_obj_ssl_socket_t *socket_new(mp_obj_t sock, struct ssl_args *args) {
     }
 
     bool cleanup = false;
-    while ((ret = mbedtls_ssl_handshake(&o->ssl)) != 0) {
-        if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
-            printf("mbedtls_ssl_handshake error: -%x\n", -ret);
-            cleanup = true;
-	    break;
     if (args->do_handshake.u_bool) {
         while ((ret = mbedtls_ssl_handshake(&o->ssl)) != 0) {
             if (ret != MBEDTLS_ERR_SSL_WANT_READ && ret != MBEDTLS_ERR_SSL_WANT_WRITE) {
                 printf("mbedtls_ssl_handshake error: -%x\n", -ret);
-                goto cleanup;
+                cleanup = true;
+                break;
             }
         }
     }
