@@ -39,6 +39,7 @@
 #include "netif/ppp/ppp.h"
 #include "netif/ppp/pppapi.h"
 #include "lwip/opt.h"
+#include "lwip/dns.h"
 
 #include "libGSM.h"
 #include "py/runtime.h"
@@ -218,11 +219,21 @@ static void ppp_status_cb(ppp_pcb *pcb, int err_code, void *ctx)
 		case PPPERR_NONE: {
 			if (debug) {
 				ESP_LOGI(TAG,"status_cb: Connected");
+				#if LWIP_DNS
+      				ip_addr_t ns;
+				#endif /* LWIP_DNS */
 				#if PPP_IPV4_SUPPORT
 				ESP_LOGI(TAG,"   ipaddr    = %s", ipaddr_ntoa(&pppif->ip_addr));
 				ESP_LOGI(TAG,"   gateway   = %s", ipaddr_ntoa(&pppif->gw));
 				ESP_LOGI(TAG,"   netmask   = %s", ipaddr_ntoa(&pppif->netmask));
 				#endif
+
+				#if LWIP_DNS
+      				ns = dns_getserver(0);
+				ESP_LOGI(TAG,"   dns1        = %s\n", ipaddr_ntoa(&ns));
+      				ns = dns_getserver(1);
+				ESP_LOGI(TAG,"   dns2        = %s\n", ipaddr_ntoa(&ns));
+				#endif /* LWIP_DNS */
 
 				#if PPP_IPV6_SUPPORT
 				ESP_LOGI(TAG,"   ip6addr   = %s", ip6addr_ntoa(netif_ip6_addr(pppif, 0)));
@@ -770,11 +781,16 @@ static void pppos_client_task()
 
 		// === Connect to the Internet ===========================
 		pppapi_set_default(ppp);
+		
+		
 		pppapi_set_auth(ppp, PPPAUTHTYPE_PAP, PPP_User, PPP_Pass);
 		//pppapi_set_auth(ppp, PPPAUTHTYPE_NONE, PPP_User, PPP_Pass);
 
 		pppapi_connect(ppp, 0);
-		// =======================================================
+		
+		ppp_set_usepeerdns(ppp, 1);
+
+ // =======================================================
 		gstat = 1;
 
 		// ===== LOOP: Handle GSM modem responses & disconnects =====
